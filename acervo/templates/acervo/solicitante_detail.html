@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}{{ object.nome }}{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1 class="h3 mb-0">{{ object.nome }}</h1>
+  <div>
+    <a class="btn btn-success" href="{% url 'acervo:retirada_create' %}?solicitante={{ object.pk }}"><i class="bi bi-box-arrow-up"></i> Nova retirada</a>
+    <a class="btn btn-primary" href="{% url 'acervo:solicitante_update' object.pk %}"><i class="bi bi-pencil"></i> Editar</a>
+    <a class="btn btn-outline-danger" href="{% url 'acervo:solicitante_delete' object.pk %}"><i class="bi bi-trash"></i> Excluir</a>
+  </div>
+</div>
+<div class="card mb-4"><div class="card-body">
+  <dl class="row mb-0">
+    <dt class="col-sm-3">Setor</dt><dd class="col-sm-9">{{ object.setor|default:"—" }}</dd>
+    <dt class="col-sm-3">E-mail</dt><dd class="col-sm-9">{{ object.email|default:"—" }}</dd>
+    <dt class="col-sm-3">Telefone / ramal</dt><dd class="col-sm-9">{{ object.telefone|default:"—" }}</dd>
+  </dl>
+</div></div>
+<h2 class="h5">Fichas solicitadas</h2>
+<div class="card"><div class="table-responsive">
+  <table class="table table-sm table-striped mb-0">
+    <thead class="table-light"><tr><th>Nº</th><th>Servidor</th><th>Caixa</th><th>Retirada</th><th>Prazo</th><th>Devolução</th><th>Situação</th></tr></thead>
+    <tbody>
+    {% for r in retiradas %}
+      <tr><td><a href="{{ r.get_absolute_url }}">{{ r.pk }}</a></td><td>{{ r.servidor.nome }}</td><td>{{ r.numero_caixa|default:"—" }}</td>
+        <td>{{ r.data_retirada|date:"d/m/Y" }}</td><td>{{ r.prazo_devolucao|date:"d/m/Y"|default:"—" }}</td><td>{{ r.data_devolucao|date:"d/m/Y"|default:"—" }}</td>
+        <td>{% include "acervo/_situacao.html" %}</td></tr>
+    {% empty %}
+      <tr><td colspan="7" class="text-center text-muted py-3">Nenhuma retirada para este solicitante.</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div></div>
+<a class="btn btn-link mt-3" href="{% url 'acervo:solicitante_list' %}">&larr; Voltar para a lista</a>
+{% endblock %}

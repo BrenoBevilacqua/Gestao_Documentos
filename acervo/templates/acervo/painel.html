@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}Painel{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1 class="h3 mb-0">Painel resumo</h1>
+  <span class="text-muted">Hoje: {{ hoje|date:"d/m/Y" }} · Prazo padrão: {{ prazo_dias }} dias</span>
+</div>
+<div class="row g-3 mb-4">
+  <div class="col-sm-6 col-lg-3"><a class="text-decoration-none" href="{% url 'acervo:retirada_list' %}">
+    <div class="card card-metric border-primary"><div class="card-body"><div class="text-muted">Total de fichas retiradas</div><div class="display-6 text-primary">{{ total }}</div></div></div></a></div>
+  <div class="col-sm-6 col-lg-3"><a class="text-decoration-none" href="{% url 'acervo:retirada_list' %}?situacao=Emprestado">
+    <div class="card card-metric border-warning"><div class="card-body"><div class="text-muted">Emprestadas (fora do acervo)</div><div class="display-6 text-warning">{{ emprestadas }}</div></div></div></a></div>
+  <div class="col-sm-6 col-lg-3"><a class="text-decoration-none" href="{% url 'acervo:retirada_list' %}?situacao=Devolvido">
+    <div class="card card-metric border-success"><div class="card-body"><div class="text-muted">Devolvidas</div><div class="display-6 text-success">{{ devolvidas }}</div></div></div></a></div>
+  <div class="col-sm-6 col-lg-3"><a class="text-decoration-none" href="{% url 'acervo:retirada_list' %}?situacao=Atrasado">
+    <div class="card card-metric border-danger"><div class="card-body"><div class="text-muted">Em atraso</div><div class="display-6 text-danger">{{ atrasadas }}</div></div></div></a></div>
+</div>
+
+<div class="row g-4">
+  <div class="col-lg-6">
+    <div class="card">
+      <div class="card-header bg-danger-subtle"><i class="bi bi-exclamation-triangle"></i> Fichas em atraso</div>
+      <div class="table-responsive">
+        <table class="table table-sm mb-0">
+          <thead><tr><th>Nº</th><th>Servidor</th><th>Solicitante</th><th>Prazo</th><th></th></tr></thead>
+          <tbody>
+          {% for r in lista_atrasadas %}
+            <tr><td>{{ r.pk }}</td><td>{{ r.servidor.nome }}</td><td>{{ r.solicitante.nome }}</td><td>{{ r.prazo_devolucao|date:"d/m/Y" }}</td>
+              <td class="text-end"><a class="btn btn-sm btn-outline-success" href="{% url 'acervo:retirada_devolucao' r.pk %}">Devolver</a></td></tr>
+          {% empty %}
+            <tr><td colspan="5" class="text-muted text-center py-3">Nenhuma ficha em atraso. 🎉</td></tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-6">
+    <div class="card">
+      <div class="card-header"><i class="bi bi-clock-history"></i> Últimas movimentações</div>
+      <div class="table-responsive">
+        <table class="table table-sm mb-0">
+          <thead><tr><th>Nº</th><th>Servidor</th><th>Retirada</th><th>Situação</th></tr></thead>
+          <tbody>
+          {% for r in ultimas %}
+            <tr><td><a href="{{ r.get_absolute_url }}">{{ r.pk }}</a></td><td>{{ r.servidor.nome }}</td><td>{{ r.data_retirada|date:"d/m/Y" }}</td><td>{% include "acervo/_situacao.html" %}</td></tr>
+          {% empty %}
+            <tr><td colspan="4" class="text-muted text-center py-3">Nenhuma retirada registrada.</td></tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <p class="text-muted small mt-2">{{ total_servidores }} servidor(es) e {{ total_solicitantes }} solicitante(s) cadastrados.</p>
+  </div>
+</div>
+{% endblock %}

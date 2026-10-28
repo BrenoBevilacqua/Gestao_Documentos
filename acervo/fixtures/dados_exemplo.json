@@ -1,0 +1,42 @@
+[
+{
+  "model": "acervo.servidor",
+  "pk": 1,
+  "fields": {
+    "nome": "Jefferson",
+    "matricula": "1",
+    "numero_caixa": 1,
+    "observacoes": "",
+    "criado_em": "2026-10-22T12:05:17.396Z",
+    "atualizado_em": "2026-10-22T12:05:17.396Z"
+  }
+},
+{
+  "model": "acervo.solicitante",
+  "pk": 1,
+  "fields": {
+    "nome": "Pedro",
+    "setor": "RH",
+    "email": "",
+    "telefone": "",
+    "criado_em": "2026-10-22T12:05:17.397Z",
+    "atualizado_em": "2026-10-22T12:05:17.397Z"
+  }
+},
+{
+  "model": "acervo.retirada",
+  "pk": 1,
+  "fields": {
+    "numero_caixa": 1,
+    "servidor": 1,
+    "solicitante": 1,
+    "data_retirada": "2026-08-24",
+    "prazo_devolucao": "2026-08-29",
+    "data_devolucao": null,
+    "observacoes": "",
+    "anexo": "",
+    "criado_em": "2026-10-22T12:05:17.398Z",
+    "atualizado_em": "2026-10-22T12:05:17.398Z"
+  }
+}
+]

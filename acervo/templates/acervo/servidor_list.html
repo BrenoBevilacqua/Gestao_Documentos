@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Servidores{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1 class="h3 mb-0">Servidores</h1>
+  <a href="{% url 'acervo:servidor_create' %}" class="btn btn-primary"><i class="bi bi-plus-lg"></i> Novo servidor</a>
+</div>
+{% include "acervo/_search.html" with placeholder="Nome, matrícula ou nº da caixa..." %}
+<div class="card">
+  <div class="table-responsive">
+    <table class="table table-hover table-striped mb-0">
+      <thead class="table-light"><tr><th>Nome</th><th>Matrícula</th><th>Nº da Caixa</th><th>Retiradas</th><th class="text-end">Ações</th></tr></thead>
+      <tbody>
+      {% for s in object_list %}
+        <tr>
+          <td><a href="{{ s.get_absolute_url }}">{{ s.nome }}</a></td>
+          <td>{{ s.matricula|default:"—" }}</td>
+          <td>{{ s.numero_caixa|default:"—" }}</td>
+          <td>{{ s.qtd_retiradas }}</td>
+          <td class="text-end text-nowrap">
+            <a class="btn btn-sm btn-outline-success" href="{% url 'acervo:retirada_create' %}?servidor={{ s.pk }}" title="Nova retirada"><i class="bi bi-box-arrow-up"></i></a>
+            <a class="btn btn-sm btn-outline-secondary" href="{{ s.get_absolute_url }}" title="Ver"><i class="bi bi-eye"></i></a>
+            <a class="btn btn-sm btn-outline-primary" href="{% url 'acervo:servidor_update' s.pk %}" title="Editar"><i class="bi bi-pencil"></i></a>
+            <a class="btn btn-sm btn-outline-danger" href="{% url 'acervo:servidor_delete' s.pk %}" title="Excluir"><i class="bi bi-trash"></i></a>
+          </td>
+        </tr>
+      {% empty %}
+        <tr><td colspan="5" class="text-center text-muted py-4">Nenhum servidor encontrado.</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class="mt-3">{% include "acervo/_pagination.html" %}</div>
+{% endblock %}
